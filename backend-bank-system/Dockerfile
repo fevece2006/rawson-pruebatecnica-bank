@@ -9,8 +9,8 @@ COPY gradle/wrapper/ gradle/wrapper/
 # Copiar todo el repo (incluye el submódulo backend-bank-system)
 COPY . .
 
-# Normalizar permisos y build solo del submódulo
-RUN chmod +x ./gradlew && ./gradlew clean :backend-bank-system:bootJar --no-daemon
+# Convert CRLF to LF (in case files were checked out on Windows) and build
+RUN sed -i 's/\r$//' ./gradlew && chmod +x ./gradlew && ./gradlew clean :backend-bank-system:bootJar --no-daemon
 
 # Runtime con JRE 21
 FROM eclipse-temurin:21-jre-jammy

@@ -5,7 +5,8 @@ COPY gradlew gradlew.bat ./
 COPY gradle/wrapper/ gradle/wrapper/
 COPY . .
 
-RUN chmod +x ./gradlew && ./gradlew clean :ledger-service:bootJar --no-daemon
+# Convert CRLF to LF (in case files were checked out on Windows)
+RUN sed -i 's/\r$//' ./gradlew && chmod +x ./gradlew && ./gradlew clean :ledger-service:bootJar --no-daemon
 
 FROM eclipse-temurin:21-jre-jammy
 ARG JAR_FILE=ledger-service/build/libs/*.jar
