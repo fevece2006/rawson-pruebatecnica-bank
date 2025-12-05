@@ -1,0 +1,25 @@
+plugins {
+    id 'base'
+}
+
+allprojects {
+    group = 'com.rawson'
+    version = '0.1.0'
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
