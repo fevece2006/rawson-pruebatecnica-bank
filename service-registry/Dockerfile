@@ -1,7 +1,7 @@
 FROM gradle:8.4.3-jdk21 AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . .
-RUN gradle clean bootJar --no-daemon
+RUN if [ -f ./gradlew ]; then chmod +x ./gradlew && ./gradlew clean bootJar --no-daemon; else gradle clean bootJar --no-daemon; fi
 
 FROM eclipse-temurin:21-jre-jammy
 ARG JAR_FILE=build/libs/*.jar
