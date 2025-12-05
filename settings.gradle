@@ -1,0 +1,6 @@
+rootProject.name = 'rawson-bank'
+include 'backend-bank-system'
+include 'ledger-service'
+include 'orchestrator-service'
+include 'service-registry'
+include 'api-gateway' // conservar solo si es Java; si no, quitar
