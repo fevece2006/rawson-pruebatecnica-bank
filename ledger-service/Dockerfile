@@ -1,5 +1,11 @@
-﻿FROM eclipse-temurin:17-jdk
-WORKDIR /app
-COPY build/libs/ledger-service.jar /app/ledger-service.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/ledger-service.jar"]
+# Mismo multi-stage para ledger-service
+FROM gradle:8.4.3-jdk21 AS build
+WORKDIR /home/gradle/project
+COPY --chown=gradle:gradle . .
+RUN gradle clean bootJar --no-daemon
+
+FROM eclipse-temurin:21-jre-jammy
+ARG JAR_FILE=build/libs/*.jar
+COPY --from=build /home/gradle/project/${JAR_FILE} /app/app.jar
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","/app/app.jar"]
