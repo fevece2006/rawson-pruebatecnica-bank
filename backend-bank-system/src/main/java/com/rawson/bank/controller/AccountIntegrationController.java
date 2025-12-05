@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /*
- Controlador que crea account + outbox en la misma transacciÃ³n.
+ Controlador que crea account + outbox en la misma transaccion.
  POST /api/v1/accounts/outbox
 */
 @RestController

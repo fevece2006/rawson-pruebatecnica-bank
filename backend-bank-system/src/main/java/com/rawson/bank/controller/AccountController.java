@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /*
- Controlador REST bÃ¡sico para Accounts.
+ Controlador REST basico para Accounts.
 */
 @RestController
 @RequestMapping("/api/v1/accounts")

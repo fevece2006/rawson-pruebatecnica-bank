@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.OffsetDateTime;
 
 /*
- Entidad Outbox: patrÃ³n Outbox para publicaciÃ³n transaccional.
+ Entidad Outbox: patron Outbox para publicacion transaccional.
 */
 @Entity
 @Table(name = "outbox")

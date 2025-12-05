@@ -32,7 +32,7 @@ public class AccountCamelRoute extends RouteBuilder {
             .maximumRedeliveries(3)
             .redeliveryDelay(5000)
             .handled(true)
-            .log("Error procesando mensaje, se enviarÃ¡ a DLQ: ${exception.message}")
+            .log("Error procesando mensaje, se enviara a DLQ: ${exception.message}")
             .toD("kafka:${header.dlqTopic}?brokers=" + kafkaBrokers);
 
         fromF("kafka:%s?brokers=%s&groupId=camel-outbox-group", outboxTopic, kafkaBrokers)

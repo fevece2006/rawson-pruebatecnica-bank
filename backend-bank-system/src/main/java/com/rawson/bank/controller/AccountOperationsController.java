@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /*
- Endpoints que el Orchestrator usarÃ¡: debit, credit, compensate (stubs).
+ Endpoints que el Orchestrator usara: debit, credit, compensate (stubs).
 */
 @RestController
 @RequestMapping("/api/v1/accounts")

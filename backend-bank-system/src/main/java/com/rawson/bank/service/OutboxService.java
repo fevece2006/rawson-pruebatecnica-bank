@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 
 /*
- Servicio que escribe eventos en la tabla outbox dentro de la misma transacciÃ³n.
+ Servicio que escribe eventos en la tabla outbox dentro de la misma transaccion.
 */
 @Service
 public class OutboxService {

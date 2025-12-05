@@ -35,7 +35,7 @@ public class TransferSagaRoute extends RouteBuilder {
 
         from("direct:compensateDebit")
             .routeId("compensate-debit")
-            .log("CompensaciÃ³n: revertir dÃ©bito para ${body}");
+            .log("Compensacion: revertir debito para ${body}");
 
         from("direct:creditAccount")
             .routeId("credit-account")
