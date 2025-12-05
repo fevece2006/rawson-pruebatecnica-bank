@@ -1,4 +1,4 @@
-﻿# Build stage con JDK 21 usando wrapper desde la raíz
+# Build stage con JDK 21 usando wrapper desde la raíz
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /home/project
 
