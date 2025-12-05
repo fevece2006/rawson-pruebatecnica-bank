@@ -1,4 +1,4 @@
-﻿version: "3.8"
+version: "3.8"
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.1
@@ -76,17 +76,18 @@ services:
 
   service-registry:
     build:
-      context: ./service-registry
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: service-registry/Dockerfile
     ports:
       - "8761:8761"
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
 
   api-gateway:
     build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api-gateway/Dockerfile
     depends_on:
       - service-registry
     ports:
@@ -97,8 +98,8 @@ services:
 
   orchestrator:
     build:
-      context: ./orchestrator-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: orchestrator-service/Dockerfile
     depends_on:
       - service-registry
       - kafka
@@ -107,13 +108,16 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bankdb
+      - SPRING_DATASOURCE_USERNAME=bank
+      - SPRING_DATASOURCE_PASSWORD=bank
     ports:
       - "8090:8080"
 
   ledger:
     build:
-      context: ./ledger-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ledger-service/Dockerfile
     depends_on:
       - service-registry
       - kafka
@@ -122,13 +126,16 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bankdb
+      - SPRING_DATASOURCE_USERNAME=bank
+      - SPRING_DATASOURCE_PASSWORD=bank
     ports:
       - "8091:8080"
 
   backend:
     build:
-      context: ./backend-bank-system
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend-bank-system/Dockerfile
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bankdb
@@ -139,7 +146,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka
       KAFKA_OUTBOX_TOPIC: dbserver1.bankdb.public.outbox
     ports:
-      - "8081:8080"
+      - "8084:8080"
     depends_on:
       - kafka
       - postgres

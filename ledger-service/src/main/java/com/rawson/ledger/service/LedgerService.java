@@ -1,4 +1,4 @@
-﻿package com.rawson.ledger.service;
+package com.rawson.ledger.service;
 
 import com.rawson.ledger.repository.LedgerEntryRepository;
 import com.rawson.ledger.domain.LedgerEntry;

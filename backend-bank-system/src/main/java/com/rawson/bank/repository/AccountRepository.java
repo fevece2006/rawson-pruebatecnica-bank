@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.repository;
+package com.rawson.bank.repository;
 
 import com.rawson.bank.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

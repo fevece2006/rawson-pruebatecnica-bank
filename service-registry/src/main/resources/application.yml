@@ -1,4 +1,8 @@
-﻿server:
+spring:
+  application:
+    name: service-registry
+
+server:
   port: 8761
 
 eureka:
@@ -7,3 +11,12 @@ eureka:
     fetch-registry: false
   server:
     wait-time-in-ms-when-sync-empty: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

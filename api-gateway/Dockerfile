@@ -1,5 +1,29 @@
-﻿FROM eclipse-temurin:17-jdk
+# Build stage
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /workspace
+
+# Copy gradle wrapper and configuration files
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+
+# Copy all service build files for multi-project setup
+COPY api-gateway/build.gradle.kts api-gateway/
+COPY backend-bank-system/build.gradle.kts backend-bank-system/
+COPY ledger-service/build.gradle.kts ledger-service/
+COPY orchestrator-service/build.gradle.kts orchestrator-service/
+COPY service-registry/build.gradle.kts service-registry/
+
+# Copy service-specific source files
+COPY api-gateway/src api-gateway/src
+
+# Build the project
+RUN chmod +x gradlew && ./gradlew :api-gateway:bootJar --no-daemon -x test
+
+# Runtime stage
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY build/libs/api-gateway.jar /app/api-gateway.jar
+COPY --from=build /workspace/api-gateway/build/libs/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/api-gateway.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.domain;
+package com.rawson.bank.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
