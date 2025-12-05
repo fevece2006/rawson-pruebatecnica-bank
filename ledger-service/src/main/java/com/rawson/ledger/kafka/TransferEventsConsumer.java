@@ -1,4 +1,4 @@
-﻿package com.rawson.ledger.kafka;
+package com.rawson.ledger.kafka;
 
 import com.rawson.ledger.service.LedgerService;
 import org.springframework.kafka.annotation.KafkaListener;

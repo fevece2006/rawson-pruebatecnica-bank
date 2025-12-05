@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.camel;
+package com.rawson.bank.camel;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.saga.InMemorySagaService;
