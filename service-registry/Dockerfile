@@ -1,3 +1,4 @@
+# Dockerfile multi-stage: usa Gradle Wrapper si está presente, fallback a gradle del contenedor.
 FROM gradle:8.4.3-jdk21 AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . .
