@@ -1,24 +1,34 @@
-```markdown
 # rawson-pruebatecnica-bank
 
-Migración a Gradle (Java 21), Docker y CI (GitHub Actions).
+Requisitos
+- Java JDK 21 (JAVA_HOME configurado)
+- Docker Desktop (WSL2 backend recomendado)
+- Git
 
-Pasos locales:
+Pasos locales rápidos
+1. Clona y crea branch:
+   git checkout main
+   git pull origin main
+   git checkout -b fix/gradle-docker-java21
 
-1. Generar o usar el Gradle wrapper:
-   - Si no está incluido: ./gradlew wrapper
-2. Compilar todo:
-   - ./gradlew clean build
-3. Levantar con Docker Compose:
-   - docker-compose up --build
-4. Verifica:
-   - Service Registry: http://localhost:8761
-   - Gateway: http://localhost:8085
+2. Asegúrate del Gradle Wrapper (si falta genera y añade):
+   # PowerShell (en la raíz del repo)
+   docker run --rm -v "${PWD}:/home/gradle/project" -w /home/gradle/project gradle:8.4.3-jdk17 gradle wrapper --gradle-version 8.4.3
 
-CI:
-- Se añade .github/workflows/ci.yml que ejecuta ./gradlew clean build con Java 21.
+3. Normaliza gradlew a LF si trabajas en Windows:
+   Copy-Item .\gradlew .\gradlew.bak
+   (Get-Content .\gradlew -Raw) -replace "`r`n","`n" | Set-Content -NoNewline -Encoding UTF8 .\gradlew
 
-Notas:
-- Ajusta puertos y variables de entorno en docker-compose.yml según tus preferencias.
-- Revisa versiones de dependencias Spring Cloud/Eureka para compatibilidad con Spring Boot y Java 21.
-```
+4. Commit de wrapper:
+   git add gradlew gradlew.bat gradle/wrapper/gradle-wrapper.properties gradle/wrapper/gradle-wrapper.jar
+   git commit -m "Add Gradle Wrapper and Docker/CI adjustments for Java 21"
+   git push origin fix/gradle-docker-java21
+
+5. Rebuild y run:
+   docker builder prune --force
+   docker compose build --no-cache
+   docker compose up
+
+Verifica:
+- Service Registry: http://localhost:8761
+- Gateway: http://localhost:8085

@@ -1,11 +1,15 @@
-﻿# Dockerfile multi-stage para orchestrator-service (Java 21)
-FROM eclipse-temurin:21-jdk AS build
-WORKDIR /home/gradle/project
-COPY --chown=gradle:gradle . .
-RUN if [ -f ./gradlew ]; then chmod +x ./gradlew && ./gradlew clean bootJar --no-daemon; else gradle clean bootJar --no-daemon; fi
+﻿FROM eclipse-temurin:21-jdk AS build
+WORKDIR /home/project
+
+COPY gradlew gradlew.bat ./
+COPY gradle/wrapper/ gradle/wrapper/
+COPY . .
+
+# Si orchestrator usa Spring Boot deja bootJar; si no, cambia por assemble
+RUN chmod +x ./gradlew && ./gradlew clean :orchestrator-service:bootJar --no-daemon
 
 FROM eclipse-temurin:21-jre-jammy
-ARG JAR_FILE=build/libs/*.jar
-COPY --from=build /home/gradle/project/${JAR_FILE} /app/app.jar
+ARG JAR_FILE=orchestrator-service/build/libs/*.jar
+COPY --from=build /home/project/${JAR_FILE} /app/app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]

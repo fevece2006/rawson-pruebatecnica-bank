@@ -19,7 +19,7 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Cache Gradle packages
+      - name: Cache Gradle
         uses: actions/cache@v4
         with:
           path: |
@@ -29,10 +29,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Ensure gradlew is present
+      - name: Ensure Gradle Wrapper present
         run: |
           if [ ! -f ./gradlew ]; then
-            echo "ERROR: Gradle Wrapper (gradlew) not found. Ejecuta 'gradle wrapper --gradle-version 8.4.3' localmente o añade el wrapper al repo."
+            echo "ERROR: Gradle Wrapper (gradlew) not found. Commit the wrapper to the repository."
             ls -la
             exit 1
           fi
@@ -46,5 +46,5 @@ jobs:
       - name: Run tests
         run: ./gradlew test --no-daemon
 
-      - name: Build with Gradle (package)
+      - name: Build (assemble)
         run: ./gradlew clean assemble --no-daemon

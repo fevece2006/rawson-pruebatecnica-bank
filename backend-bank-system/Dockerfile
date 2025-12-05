@@ -1,15 +1,15 @@
-﻿# Build stage con JDK 21 y uso del Gradle Wrapper desde el contexto raíz
+﻿# Build stage con JDK 21 usando wrapper desde la raíz
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /home/project
 
-# Copiar explícitamente el wrapper y su carpeta (asegura que estén disponibles dentro del contexto)
+# Copiar wrapper explícitamente desde la raíz para asegurar que esté en el contexto
 COPY gradlew gradlew.bat ./
 COPY gradle/wrapper/ gradle/wrapper/
 
-# Copiar todo el repo al contexto de build (incluye el subproyecto backend-bank-system)
+# Copiar todo el repo (incluye el submódulo backend-bank-system)
 COPY . .
 
-# Ejecutar build solo del subproyecto (usa path de Gradle: :backend-bank-system:bootJar)
+# Normalizar permisos y build solo del submódulo
 RUN chmod +x ./gradlew && ./gradlew clean :backend-bank-system:bootJar --no-daemon
 
 # Runtime con JRE 21
