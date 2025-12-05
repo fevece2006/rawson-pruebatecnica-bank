@@ -1,3 +1,4 @@
+# Dockerfile multi-stage para orchestrator-service (Java 21)
 FROM gradle:8.4.3-jdk21 AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . .
