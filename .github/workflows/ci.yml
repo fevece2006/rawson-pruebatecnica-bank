@@ -29,8 +29,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Ensure gradlew is present
+        run: |
+          if [ ! -f ./gradlew ]; then
+            echo "ERROR: Gradle Wrapper (gradlew) not found. Ejecuta 'gradle wrapper --gradle-version 8.4.3' localmente o añade el wrapper al repo."
+            ls -la
+            exit 1
+          fi
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew clean build --no-daemon
+      - name: Show Gradle version
+        run: ./gradlew --version
+
+      - name: Run tests
+        run: ./gradlew test --no-daemon
+
+      - name: Build with Gradle (package)
+        run: ./gradlew clean assemble --no-daemon
