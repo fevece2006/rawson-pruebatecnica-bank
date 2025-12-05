@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.service;
+package com.rawson.bank.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rawson.bank.domain.OutboxEvent;

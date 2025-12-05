@@ -1,16 +1,9 @@
-﻿server:
+server:
   port: 8080
 
 spring:
   application:
     name: api-gateway
-
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://service-registry:8761/eureka}
-
-spring:
   cloud:
     gateway:
       discovery:
@@ -21,3 +14,8 @@ spring:
           uri: lb://backend
           predicates:
             - Path=/api/v1/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://service-registry:8761/eureka}

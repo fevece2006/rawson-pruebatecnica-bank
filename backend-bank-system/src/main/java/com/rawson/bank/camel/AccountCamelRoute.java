@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.camel;
+package com.rawson.bank.camel;
 
 import com.rawson.bank.service.AccountEventHandler;
 import org.apache.camel.builder.RouteBuilder;

@@ -1,1 +1,1 @@
-﻿rootProject.name = "backend-bank-system"
+rootProject.name = "backend-bank-system"

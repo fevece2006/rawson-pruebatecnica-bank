@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.controller;
+package com.rawson.bank.controller;
 
 import com.rawson.bank.domain.Account;
 import com.rawson.bank.service.AccountService;

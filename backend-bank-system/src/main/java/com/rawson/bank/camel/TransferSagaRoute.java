@@ -1,11 +1,12 @@
-﻿package com.rawson.bank.camel;
+package com.rawson.bank.camel;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.SagaPropagation;
 import org.apache.camel.saga.InMemorySagaService;
 import org.springframework.stereotype.Component;
 
 /*
- Ruta de ejemplo que muestra un patrÃ³n Saga con Camel (demo).
+ Ruta de ejemplo que muestra un patrón Saga con Camel (demo).
 */
 @Component
 public class TransferSagaRoute extends RouteBuilder {
@@ -18,7 +19,7 @@ public class TransferSagaRoute extends RouteBuilder {
         from("direct:startTransferSaga")
             .routeId("start-transfer-saga")
             .saga()
-                .propagation(org.apache.camel.saga.SagaPropagation.REQUIRED)
+                .propagation(SagaPropagation.REQUIRED)
             .log("Iniciando saga de transferencia: ${body}")
             .to("direct:debitAccount")
             .to("direct:creditAccount")

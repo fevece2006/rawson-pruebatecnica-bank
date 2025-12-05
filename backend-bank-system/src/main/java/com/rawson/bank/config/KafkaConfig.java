@@ -1,4 +1,4 @@
-﻿package com.rawson.bank.config;
+package com.rawson.bank.config;
 
 import org.springframework.context.annotation.Configuration;
 
