@@ -2,8 +2,8 @@ version: '3.8'
 services:
   service-registry:
     build:
-      context: ./service-registry
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: service-registry/Dockerfile
     ports:
       - "8761:8761"
     environment:
@@ -11,8 +11,8 @@ services:
 
   api-gateway:
     build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api-gateway/Dockerfile
     ports:
       - "8085:8085"
     environment:
@@ -23,8 +23,8 @@ services:
 
   backend-bank-system:
     build:
-      context: ./backend-bank-system
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend-bank-system/Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -34,8 +34,8 @@ services:
 
   ledger-service:
     build:
-      context: ./ledger-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ledger-service/Dockerfile
     ports:
       - "8081:8081"
     environment:

@@ -1,5 +1,5 @@
-# Dockerfile multi-stage: usa Gradle Wrapper si está presente, fallback a gradle del contenedor.
-FROM gradle:8.4.3-jdk21 AS build
+﻿# Dockerfile multi-stage: usa Gradle Wrapper si estÃ¡ presente, fallback a gradle del contenedor.
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . .
 RUN if [ -f ./gradlew ]; then chmod +x ./gradlew && ./gradlew clean bootJar --no-daemon; else gradle clean bootJar --no-daemon; fi

@@ -1,13 +1,20 @@
-# Dockerfile multi-stage: usa Gradle Wrapper si está presente, fallback a gradle del contenedor.
-FROM gradle:8.4.3-jdk21 AS build
-WORKDIR /home/gradle/project
-COPY --chown=gradle:gradle . .
+﻿# Build stage con JDK 21 y uso del Gradle Wrapper desde el contexto raíz
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /home/project
 
-# Usar Gradle Wrapper si existe (reproducible), si no, usar gradle del contenedor
-RUN if [ -f ./gradlew ]; then chmod +x ./gradlew && ./gradlew clean bootJar --no-daemon; else gradle clean bootJar --no-daemon; fi
+# Copiar explícitamente el wrapper y su carpeta (asegura que estén disponibles dentro del contexto)
+COPY gradlew gradlew.bat ./
+COPY gradle/wrapper/ gradle/wrapper/
 
+# Copiar todo el repo al contexto de build (incluye el subproyecto backend-bank-system)
+COPY . .
+
+# Ejecutar build solo del subproyecto (usa path de Gradle: :backend-bank-system:bootJar)
+RUN chmod +x ./gradlew && ./gradlew clean :backend-bank-system:bootJar --no-daemon
+
+# Runtime con JRE 21
 FROM eclipse-temurin:21-jre-jammy
-ARG JAR_FILE=build/libs/*.jar
-COPY --from=build /home/gradle/project/${JAR_FILE} /app/app.jar
+ARG JAR_FILE=backend-bank-system/build/libs/*.jar
+COPY --from=build /home/project/${JAR_FILE} /app/app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]
