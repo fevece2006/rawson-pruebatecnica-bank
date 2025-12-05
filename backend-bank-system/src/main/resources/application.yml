@@ -1,0 +1,35 @@
+﻿spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankdb
+    username: bank
+    password: bank
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: 8080
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+
+kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  outbox:
+    topic: ${KAFKA_OUTBOX_TOPIC:dbserver1.bankdb.public.outbox}
+  account:
+    events:
+      topic: ${KAFKA_ACCOUNT_EVENTS_TOPIC:account.events}
+  dlq:
+    topic: ${KAFKA_DLQ_TOPIC:account.events.dlq}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+camel:
+  springboot:
+    name: backend-bank-system

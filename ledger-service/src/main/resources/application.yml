@@ -1,0 +1,25 @@
+﻿server:
+  port: 8080
+
+spring:
+  application:
+    name: ledger
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/bankdb
+    username: bank
+    password: bank
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://service-registry:8761/eureka}
+
+kafka:
+  transfer:
+    events:
+      topic: ${KAFKA_TRANSFER_EVENTS_TOPIC:transfer.events}

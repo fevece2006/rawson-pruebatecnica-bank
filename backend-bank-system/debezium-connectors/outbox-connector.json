@@ -1,0 +1,20 @@
+﻿{
+  "name": "outbox-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "bank",
+    "database.password": "bank",
+    "database.dbname" : "bankdb",
+    "database.server.name": "dbserver1",
+    "slot.name": "debezium",
+    "publication.name": "dbserver1_pub",
+    "table.include.list": "public.outbox",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
