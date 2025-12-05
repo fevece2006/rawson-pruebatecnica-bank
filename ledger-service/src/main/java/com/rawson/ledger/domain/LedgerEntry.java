@@ -1,4 +1,4 @@
-﻿package com.rawson.ledger.domain;
+package com.rawson.ledger.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

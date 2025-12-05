@@ -1,5 +1,13 @@
-﻿FROM eclipse-temurin:17-jdk
+﻿FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-COPY build/libs/ledger-service.jar /app/ledger-service.jar
+COPY gradlew .
+COPY gradle gradle
+COPY ledger-service/build.gradle.kts .
+COPY ledger-service/src src
+RUN chmod +x gradlew && ./gradlew bootJar --no-daemon
+
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/ledger-service.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

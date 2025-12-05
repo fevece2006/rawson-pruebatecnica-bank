@@ -1,5 +1,18 @@
-﻿server:
+server:
   port: 8761
+
+spring:
+  application:
+    name: service-registry
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
 
 eureka:
   client:

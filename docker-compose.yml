@@ -1,4 +1,4 @@
-﻿version: "3.8"
+version: "3.8"
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.1
@@ -31,7 +31,7 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
     ports:
-      - "8081:8081"
+      - "8084:8081"
 
   connect:
     image: debezium/connect:2.3
@@ -76,29 +76,30 @@ services:
 
   service-registry:
     build:
-      context: ./service-registry
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: service-registry/Dockerfile
     ports:
       - "8761:8761"
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
 
   api-gateway:
     build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api-gateway/Dockerfile
     depends_on:
       - service-registry
     ports:
-      - "8082:8080"
+      - "8085:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka
 
   orchestrator:
     build:
-      context: ./orchestrator-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: orchestrator-service/Dockerfile
     depends_on:
       - service-registry
       - kafka
@@ -112,8 +113,8 @@ services:
 
   ledger:
     build:
-      context: ./ledger-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ledger-service/Dockerfile
     depends_on:
       - service-registry
       - kafka
@@ -127,8 +128,8 @@ services:
 
   backend:
     build:
-      context: ./backend-bank-system
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend-bank-system/Dockerfile
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bankdb

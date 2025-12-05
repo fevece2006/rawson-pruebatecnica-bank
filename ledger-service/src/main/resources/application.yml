@@ -1,11 +1,9 @@
-﻿server:
+server:
   port: 8080
 
 spring:
   application:
     name: ledger
-
-spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/bankdb
     username: bank
@@ -13,6 +11,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
 
 eureka:
   client:

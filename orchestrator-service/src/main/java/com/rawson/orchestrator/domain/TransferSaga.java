@@ -1,4 +1,4 @@
-﻿package com.rawson.orchestrator.domain;
+package com.rawson.orchestrator.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

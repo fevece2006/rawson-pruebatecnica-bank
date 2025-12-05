@@ -1,5 +1,13 @@
-﻿FROM eclipse-temurin:17-jdk
+﻿FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-COPY build/libs/service-registry.jar /app/service-registry.jar
+COPY gradlew .
+COPY gradle gradle
+COPY service-registry/build.gradle.kts .
+COPY service-registry/src src
+RUN chmod +x gradlew && ./gradlew bootJar --no-daemon
+
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8761
-ENTRYPOINT ["java","-jar","/app/service-registry.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

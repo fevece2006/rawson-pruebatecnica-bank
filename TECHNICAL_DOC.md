@@ -1,4 +1,4 @@
-﻿# DOCUMENTACIÃ“N TÃ‰CNICA (Resumida)
+# DOCUMENTACIÃ“N TÃ‰CNICA (Resumida)
 
 Arquitectura incluida:
 - Outbox pattern (tabla outbox) + Debezium Kafka Connect para publicar events de DB a Kafka.

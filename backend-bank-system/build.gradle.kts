@@ -1,4 +1,4 @@
-﻿plugins {
+plugins {
     id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.0"
     java
@@ -18,18 +18,25 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
-    implementation("org.projectlombok:lombok:1.18.28")
+    compileOnly("org.projectlombok:lombok:1.18.30")
     runtimeOnly("org.postgresql:postgresql")
-    annotationProcessor("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     // Camel & additional components
-    implementation("org.apache.camel.springboot:camel-spring-boot-starter:4.1.2")
-    implementation("org.apache.camel:camel-kafka:4.1.2")
-    implementation("org.apache.camel:camel-jackson:4.1.2")
-    implementation("org.apache.camel:camel-debezium-postgres:4.1.2")
-    implementation("org.apache.camel:camel-saga:4.1.2")
-    implementation("org.apache.camel:camel-jdbc:4.1.2")
+    implementation("org.apache.camel.springboot:camel-spring-boot-starter:4.4.0")
+    implementation("org.apache.camel:camel-kafka:4.4.0")
+    implementation("org.apache.camel:camel-jackson:4.4.0")
+    implementation("org.apache.camel:camel-debezium-postgres:4.4.0")
+    implementation("org.apache.camel:camel-saga:4.4.0")
+    implementation("org.apache.camel:camel-jdbc:4.4.0")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.3") }
 }
 
 tasks.register<Copy>("copyJar") {
