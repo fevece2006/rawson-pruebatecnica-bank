@@ -1,0 +1,149 @@
+name: Apply Copilot changes
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create branch (based on main if needed)
+        run: |
+          git fetch origin main:main || true
+          if git ls-remote --exit-code --heads origin copilot/fix-docker-build-issues; then
+            git checkout copilot/fix-docker-build-issues
+          else
+            git checkout -b copilot/fix-docker-build-issues origin/main || git checkout -b copilot/fix-docker-build-issues main
+          fi
+
+      - name: Ensure directories
+        run: |
+          mkdir -p frontend-bank-system backend-bank-system
+
+      - name: Write frontend package.json (UTF-8 without BOM)
+        run: |
+          cat > frontend-bank-system/package.json <<'EOF'
+          {
+            "name": "frontend-bank-system",
+            "version": "0.1.0",
+            "private": true,
+            "dependencies": {
+              "react": "^18.2.0",
+              "react-dom": "^18.2.0",
+              "react-scripts": "5.0.1",
+              "axios": "^1.4.0"
+            },
+            "scripts": {
+              "start": "react-scripts start",
+              "dev": "react-scripts start",
+              "build": "react-scripts build",
+              "test": "react-scripts test",
+              "eject": "react-scripts eject"
+            },
+            "proxy": "http://localhost:8080"
+          }
+          EOF
+
+      - name: Write docker-compose.yml
+        run: |
+          cat > docker-compose.yml <<'EOF'
+          version: "3.8"
+
+          services:
+            backend:
+              build:
+                context: ./backend-bank-system
+                dockerfile: Dockerfile
+              image: rawson-backend:latest
+              ports:
+                - "8080:8080"
+              environment:
+                - SPRING_PROFILES_ACTIVE=dev
+                - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rawsondb
+                - SPRING_DATASOURCE_USERNAME=user
+                - SPRING_DATASOURCE_PASSWORD=password
+              depends_on:
+                - db
+
+            db:
+              image: postgres:15
+              environment:
+                POSTGRES_USER: user
+                POSTGRES_PASSWORD: password
+                POSTGRES_DB: rawsondb
+              ports:
+                - "5432:5432"
+              volumes:
+                - db-data:/var/lib/postgresql/data
+
+          volumes:
+            db-data:
+          EOF
+
+      - name: Write backend Dockerfile
+        run: |
+          cat > backend-bank-system/Dockerfile <<'EOF'
+          # Build stage
+          FROM gradle:8.4-jdk17 AS build
+          WORKDIR /home/app
+          COPY . .
+          RUN gradle clean bootJar -x test --no-daemon
+
+          # Runtime stage
+          FROM eclipse-temurin:17-jre
+          WORKDIR /app
+          COPY --from=build /home/app/build/libs/*.jar app.jar
+          EXPOSE 8080
+          ENTRYPOINT ["java","-jar","/app/app.jar"]
+          EOF
+
+      - name: Write backend .dockerignore
+        run: |
+          cat > backend-bank-system/.dockerignore <<'EOF'
+          .gradle
+          build
+          out
+          .git
+          .gitignore
+          **/node_modules
+          **/*.log
+          EOF
+
+      - name: Commit changes
+        run: |
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Fix Docker build + add frontend dev script: add Dockerfile, .dockerignore, update docker-compose and package.json"
+            git push --set-upstream origin copilot/fix-docker-build-issues
+          fi
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing_pr=$(curl -s -H "Authorization: Bearer ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:copilot/fix-docker-build-issues&base=main" | jq '.[0].html_url' -r)
+          if [ "$existing_pr" != "null" ] && [ -n "$existing_pr" ]; then
+            echo "PR already exists: $existing_pr"
+            echo "$existing_pr" > pr-url.txt
+          else
+            body="Qué: Permite levantar el backend con docker-compose up --build y el frontend con npm run dev.\n\nArchivos cambiados: frontend-bank-system/package.json, docker-compose.yml, backend-bank-system/Dockerfile, backend-bank-system/.dockerignore.\n\nCómo probar:\n1) Desde la raíz: docker-compose up --build\n2) Desde frontend-bank-system: npm install && npm run dev\n\nNota: credenciales DB de ejemplo (user/password). Ajustar si es necesario."
+            response=$(curl -s -X POST -H "Authorization: Bearer ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pulls -d "$(jq -n --arg t "Fix Docker build + frontend dev script" --arg h "copilot/fix-docker-build-issues" --arg b "main" --arg bd "$body" '{title:$t, head:$h, base:$b, body:$bd}')" )
+            echo "$response" | jq -r '.html_url' > pr-url.txt
+            echo "PR created: $(cat pr-url.txt)"
+          fi
+
+      - name: Output PR URL
+        run: |
+          if [ -f pr-url.txt ]; then
+            echo "PR URL: $(cat pr-url.txt)"
+          else
+            echo "No PR URL found."
+          fi
