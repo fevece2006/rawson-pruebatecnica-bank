@@ -6,7 +6,7 @@ import axios from "axios";
 */
 function App() {
   const [accounts, setAccounts] = useState([]);
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8082";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8082";
 
   useEffect(() => {
     axios.get(`${backendUrl}/api/v1/accounts`)

@@ -1,11 +1,16 @@
-﻿FROM node:18-alpine AS build
+# Development stage using Node 18 Alpine
+FROM node:18-alpine
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
 
-FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy the rest of the project
+COPY . .
+
+# Expose Vite default port
+EXPOSE 5173
+
+# Start development server
+CMD ["npm", "run", "dev"]

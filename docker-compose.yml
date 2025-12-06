@@ -1,5 +1,17 @@
 version: '3.8'
+
 services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rawsondb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
   service-registry:
     build:
       context: .
@@ -21,16 +33,35 @@ services:
     depends_on:
       - service-registry
 
-  backend-bank-system:
+  backend:
     build:
       context: .
       dockerfile: backend-bank-system/Dockerfile
+    image: rawson-backend:latest
     ports:
       - "8080:8080"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rawsondb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
     depends_on:
+      - db
       - service-registry
+
+  frontend:
+    build:
+      context: ./frontend-bank-system
+      dockerfile: Dockerfile
+    image: rawson-frontend:latest
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    volumes:
+      - ./frontend-bank-system:/app
+      - /app/node_modules
+    depends_on:
+      - backend
 
   ledger-service:
     build:
@@ -42,3 +73,6 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
     depends_on:
       - service-registry
+
+volumes:
+  db-data:

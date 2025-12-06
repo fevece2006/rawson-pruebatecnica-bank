@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "frontend-bank-system",
   "version": "0.1.0",
   "private": true,
@@ -8,9 +8,14 @@
     "react-scripts": "5.0.1",
     "axios": "^1.4.0"
   },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.2.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "dev": "vite --host"
   }
 }
