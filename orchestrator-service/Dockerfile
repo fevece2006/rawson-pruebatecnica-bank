@@ -11,5 +11,5 @@ RUN chmod +x ./gradlew && ./gradlew clean :orchestrator-service:bootJar --no-dae
 FROM eclipse-temurin:21-jre-jammy
 ARG JAR_FILE=orchestrator-service/build/libs/*.jar
 COPY --from=build /home/project/${JAR_FILE} /app/app.jar
-EXPOSE 8080
+EXPOSE 8082
 ENTRYPOINT ["java","-jar","/app/app.jar"]

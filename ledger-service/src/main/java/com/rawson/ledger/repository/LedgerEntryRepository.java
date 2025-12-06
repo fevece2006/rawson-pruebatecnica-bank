@@ -1,4 +1,4 @@
-﻿package com.rawson.ledger.repository;
+package com.rawson.ledger.repository;
 
 import com.rawson.ledger.domain.LedgerEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
