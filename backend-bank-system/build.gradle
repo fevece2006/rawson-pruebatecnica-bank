@@ -37,6 +37,7 @@ dependencies {
     // Apache Camel
     implementation "org.apache.camel.springboot:camel-spring-boot-starter:${camelVersion}"
     implementation "org.apache.camel:camel-saga:${camelVersion}"
+    implementation "org.apache.camel.springboot:camel-kafka-starter:${camelVersion}"
     
     // Database
     runtimeOnly 'com.h2database:h2'
