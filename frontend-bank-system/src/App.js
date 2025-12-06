@@ -1,28 +1,25 @@
-﻿import React, { useEffect, useState } from "react";
-import axios from "axios";
+﻿import React, { useState } from 'react';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 
-/*
- Frontend demo que lista cuentas desde el backend a travÃ©s del Gateway.
-*/
 function App() {
-  const [accounts, setAccounts] = useState([]);
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8082";
+  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    axios.get(`${backendUrl}/api/v1/accounts`)
-      .then(res => setAccounts(res.data))
-      .catch(err => console.error("Error fetching accounts", err));
-  }, [backendUrl]);
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Rawson - Bank System (Demo)</h1>
-      <h2>Cuentas</h2>
-      <ul>
-        {accounts.map(a => (
-          <li key={a.id}>{a.accountNumber} - {a.balance} {a.currency}</li>
-        ))}
-      </ul>
+    <div className="min-h-screen bg-gray-50">
+      {!user ? (
+        <Login onLogin={handleLogin} />
+      ) : (
+        <Dashboard user={user} onLogout={handleLogout} />
+      )}
     </div>
   );
 }
