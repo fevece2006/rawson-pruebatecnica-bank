@@ -4,8 +4,42 @@ Requisitos
 - Java JDK 21 (JAVA_HOME configurado)
 - Docker Desktop (WSL2 backend recomendado)
 - Git
+- Node.js 18+ (para desarrollo frontend local)
 
-Pasos locales rápidos
+## Ejecutar con Docker Compose
+
+Para levantar todo el sistema (backend, frontend, base de datos y servicios de soporte):
+
+```bash
+docker-compose up --build
+```
+
+Esto iniciará:
+- **Base de datos PostgreSQL** en el puerto 5432
+- **Service Registry** en http://localhost:8761
+- **API Gateway** en http://localhost:8085
+- **Backend Bank System** en http://localhost:8080
+- **Ledger Service** en http://localhost:8081
+- **Frontend** en http://localhost:5173
+
+### Credenciales de PostgreSQL
+- Usuario: `postgres`
+- Contraseña: `postgres`
+- Base de datos: `rawsondb`
+
+## Ejecutar Frontend localmente (sin Docker)
+
+Para desarrollar el frontend con hot-reloading:
+
+```bash
+cd frontend-bank-system
+npm install
+npm run dev
+```
+
+El frontend estará disponible en http://localhost:3000
+
+## Pasos locales rápidos (legacy)
 1. Clona y crea branch:
    git checkout main
    git pull origin main
