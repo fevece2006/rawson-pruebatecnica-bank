@@ -88,18 +88,18 @@ function Transfer() {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-8">
+    <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 lg:p-8">
       <div className="mb-6 pb-4 border-b-2 border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800">💸 Realizar Transferencia</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">💸 Realizar Transferencia</h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <form onSubmit={handleSubmit} className="lg:col-span-2 bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">Detalles de la Transferencia</h3>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+        <form onSubmit={handleSubmit} className="xl:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg">
+          <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-4">Detalles de la Transferencia</h3>
 
           <div className="space-y-4 mb-4">
             <div>
-              <label htmlFor="fromAccount" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="fromAccount" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Cuenta Origen *
               </label>
               <select
@@ -108,7 +108,7 @@ function Transfer() {
                 value={formData.fromAccount}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
               >
                 <option value="">Seleccione cuenta origen</option>
                 {accounts.map(acc => (
@@ -122,7 +122,7 @@ function Transfer() {
             <div className="text-center text-2xl">⬇️</div>
 
             <div>
-              <label htmlFor="toAccount" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="toAccount" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Cuenta Destino *
               </label>
               <select
@@ -131,7 +131,7 @@ function Transfer() {
                 value={formData.toAccount}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
               >
                 <option value="">Seleccione cuenta destino</option>
                 {accounts.map(acc => (
@@ -143,7 +143,7 @@ function Transfer() {
             </div>
 
             <div>
-              <label htmlFor="amount" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="amount" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Monto *
               </label>
               <input
@@ -156,15 +156,15 @@ function Transfer() {
                 step="0.01"
                 min="0.01"
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
               />
             </div>
 
             <div>
-              <label htmlFor="sagaId" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="sagaId" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Saga ID (opcional)
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   id="sagaId"
@@ -172,12 +172,12 @@ function Transfer() {
                   value={formData.sagaId}
                   onChange={handleChange}
                   placeholder="SAGA-XXXXXXXXX (opcional)"
-                  className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
                 />
                 <button
                   type="button"
                   onClick={generateSagaId}
-                  className="px-4 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 whitespace-nowrap transition-colors"
+                  className="px-4 py-2 sm:py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 whitespace-nowrap transition-colors text-sm"
                 >
                   Generar
                 </button>
@@ -186,7 +186,7 @@ function Transfer() {
           </div>
 
           {message && (
-            <div className={`mb-4 px-4 py-3 rounded-lg text-sm font-medium ${
+            <div className={`mb-4 px-3 sm:px-4 py-3 rounded-lg text-xs sm:text-sm font-medium ${
               message.type === 'success'
                 ? 'bg-green-50 border border-green-200 text-green-700'
                 : 'bg-red-50 border border-red-200 text-red-700'
@@ -199,7 +199,7 @@ function Transfer() {
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {loading ? 'Procesando...' : 'Iniciar Transferencia'}
             </button>
@@ -207,16 +207,16 @@ function Transfer() {
         </form>
 
         <div className="space-y-4">
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <h3 className="text-lg font-bold text-gray-800 mb-3">🔄 Patrón Saga</h3>
-            <p className="text-sm text-gray-600 mb-4">
+          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg">
+            <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3">🔄 Patrón Saga</h3>
+            <p className="text-xs sm:text-sm text-gray-600 mb-4">
               Las transferencias utilizan el <strong>Patrón Saga</strong> para garantizar 
               consistencia eventual en transacciones distribuidas.
             </p>
 
-            <div className="bg-white p-4 rounded-lg border-l-4 border-indigo-500 mb-4">
-              <h4 className="text-sm font-semibold text-gray-800 mb-3">Flujo de la Saga:</h4>
-              <ol className="space-y-3 text-sm">
+            <div className="bg-white p-3 sm:p-4 rounded-lg border-l-4 border-indigo-500 mb-4">
+              <h4 className="text-xs sm:text-sm font-semibold text-gray-800 mb-3">Flujo de la Saga:</h4>
+              <ol className="space-y-3 text-xs sm:text-sm">
                 <li>
                   <strong className="text-indigo-600 block mb-1">STARTED</strong>
                   <p className="text-gray-600 text-xs">Se crea la saga y se registra en el orchestrator</p>

@@ -62,19 +62,19 @@ function CreateAccount() {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-8">
+    <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 lg:p-8">
       <div className="mb-6 pb-4 border-b-2 border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800">➕ Crear Nueva Cuenta</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">➥ Crear Nueva Cuenta</h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <form onSubmit={handleSubmit} className="lg:col-span-2 bg-gray-50 p-6 rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+        <form onSubmit={handleSubmit} className="xl:col-span-2 bg-gray-50 p-4 sm:p-6 rounded-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
             <div>
-              <label htmlFor="accountNumber" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="accountNumber" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Número de Cuenta *
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   id="accountNumber"
@@ -83,12 +83,12 @@ function CreateAccount() {
                   onChange={handleChange}
                   placeholder="ACC-XXXXXXXXX"
                   required
-                  className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
                 />
                 <button
                   type="button"
                   onClick={generateAccountNumber}
-                  className="px-4 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 whitespace-nowrap transition-colors"
+                  className="px-4 py-2 sm:py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 whitespace-nowrap transition-colors text-sm"
                 >
                   Generar
                 </button>
@@ -96,7 +96,7 @@ function CreateAccount() {
             </div>
 
             <div>
-              <label htmlFor="currency" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="currency" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Moneda *
               </label>
               <select
@@ -105,7 +105,7 @@ function CreateAccount() {
                 value={formData.currency}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
               >
                 <option value="USD">USD - Dólar Estadounidense</option>
                 <option value="EUR">EUR - Euro</option>
@@ -115,9 +115,9 @@ function CreateAccount() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
             <div>
-              <label htmlFor="balance" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="balance" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 Saldo Inicial *
               </label>
               <input
@@ -130,12 +130,12 @@ function CreateAccount() {
                 step="0.01"
                 min="0"
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
               />
             </div>
 
             <div>
-              <label htmlFor="ownerId" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="ownerId" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                 ID del Propietario *
               </label>
               <input
@@ -146,13 +146,13 @@ function CreateAccount() {
                 onChange={handleChange}
                 placeholder="USER-XXXX"
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-sm"
               />
             </div>
           </div>
 
           {message && (
-            <div className={`mb-4 px-4 py-3 rounded-lg text-sm font-medium ${
+            <div className={`mb-4 px-3 sm:px-4 py-3 rounded-lg text-xs sm:text-sm font-medium ${
               message.type === 'success'
                 ? 'bg-green-50 border border-green-200 text-green-700'
                 : 'bg-red-50 border border-red-200 text-red-700'
@@ -165,17 +165,17 @@ function CreateAccount() {
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {loading ? 'Creando...' : 'Crear Cuenta'}
             </button>
           </div>
         </form>
 
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">ℹ️ Información</h3>
+        <div className="bg-gray-50 p-4 sm:p-6 rounded-lg">
+          <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-4">ℹ️ Información</h3>
           <ul className="space-y-3 mb-6">
-            <li className="flex items-start text-sm text-gray-600">
+            <li className="flex items-start text-xs sm:text-sm text-gray-600">
               <span className="text-indigo-500 font-bold mr-2">•</span>
               <span>El número de cuenta debe ser único en el sistema</span>
             </li>
