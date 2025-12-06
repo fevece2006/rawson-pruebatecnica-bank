@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: backend-bank-system
   datasource:
     url: jdbc:postgresql://localhost:5432/bankdb
     username: bank

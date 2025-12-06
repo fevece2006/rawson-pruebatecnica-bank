@@ -18,3 +18,6 @@ backend-bank-system/debezium-connectors/outbox-connector.json
 
 Levantar demo:
   docker compose up --build
+
+Registrar conector Outbox (una vez que los servicios estÃ©n arriba):
+  curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:8083/connectors/ -d @backend-bank-system/debezium-connectors/outbox-connector.json

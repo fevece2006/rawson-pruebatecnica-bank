@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8085
 
 spring:
   application:
@@ -10,14 +10,17 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://service-registry:8761/eureka}
 
-spring:
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true
       routes:
-        - id: backend_route
-          uri: lb://backend
+        - id: orchestrator_route
+          uri: lb://orchestrator
           predicates:
-            - Path=/api/v1/**
+            - Path=/api/v1/transfer/**
+        - id: backend_route
+          uri: lb://backend-bank-system
+          predicates:
+            - Path=/api/v1/accounts/**
