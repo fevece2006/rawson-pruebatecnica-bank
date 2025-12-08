@@ -93,24 +93,39 @@ docker-compose up --build backend-bank-system
 
 ### 6. Frontend no carga o no conecta al backend
 
-**Síntomas**: Error de red en `http://localhost:3000`
+**Síntomas**: Error de red en `http://localhost:3000`, warnings de source maps, Keycloak "Page not found"
 
 **Soluciones**:
 
-```cmd
-# Verificar que node_modules está instalado
+```bash
+# 1. Verificar que el archivo .env existe
 cd frontend-bank-system
+cat .env  # O: type .env en Windows
+
+# 2. Si no existe, crear .env con la configuración correcta
+# Ver FRONTEND_CONFIG.md para contenido completo
+
+# 3. Instalar dependencias (incluye cross-env)
 npm install
 
-# Limpiar cache y reinstalar
-rm -rf node_modules package-lock.json
-npm install
+# 4. Verificar que Keycloak está funcionando
+curl http://localhost:8080/realms/rawson-bank
 
-# Verificar que el backend está corriendo
-curl http://localhost:8085/actuator/health
+# 5. Si Keycloak muestra "Page not found", importar realm
+cd ..
+.\configure-keycloak-client.ps1
 
-# Verificar configuración de proxy/backend URL
-# En frontend-bank-system/src/App.js buscar REACT_APP_BACKEND_URL
+# 6. Verificar que backend services están corriendo
+curl http://localhost:8082/actuator/health  # Orchestrator
+curl http://localhost:8083/actuator/health  # Backend
+curl http://localhost:8085/actuator/health  # API Gateway
+
+# 7. Iniciar frontend con el script correcto
+.\start-frontend-fixed.ps1
+
+# Credenciales para login:
+# Usuario: testuser / password123
+# Admin: admin / admin123
 ```
 
 ### 7. Error 503 en API Gateway
@@ -162,7 +177,9 @@ docker-compose up -d kafka
 docker-compose ps
 
 # Ejecutar healthcheck manualmente
-docker-compose exec backend-bank-system curl -f http://localhost:8080/actuator/health
+docker-compose exec backend-bank-system curl -f http://localhost:8083/actuator/health
+docker-compose exec ledger-service curl -f http://localhost:8081/actuator/health
+docker-compose exec orchestrator-service curl -f http://localhost:8082/actuator/health
 
 # Si curl no está disponible, instalar o cambiar healthcheck a usar wget
 ```
@@ -245,11 +262,34 @@ Antes de reportar un problema, verifica:
 - [ ] Hay suficiente espacio en disco (mínimo 10GB)
 - [ ] Hay suficiente memoria asignada a Docker (mínimo 4GB)
 - [ ] Los puertos no están siendo usados por otros procesos
-- [ ] El servicio Eureka está corriendo y saludable
-- [ ] PostgreSQL está corriendo y saludable
-- [ ] Kafka y Zookeeper están corriendo
-- [ ] Las variables de entorno están correctas
+- [ ] El servicio Eureka está corriendo y saludable (http://localhost:8761)
+- [ ] PostgreSQL está corriendo y saludable (puerto 5432)
+- [ ] Kafka y Zookeeper están corriendo (puertos 9092, 2181)
+- [ ] Keycloak está corriendo con realm configurado (http://localhost:8080/realms/rawson-bank)
+- [ ] Las variables de entorno están correctas (revisar `.env` en frontend)
 - [ ] No hay cambios sin guardar en archivos de configuración
+
+### Verificación de Estado de Servicios
+
+```bash
+# Verificar todos los contenedores
+docker-compose ps
+
+# Verificar Keycloak realm
+curl http://localhost:8080/realms/rawson-bank
+
+# Verificar health endpoints
+curl http://localhost:8083/actuator/health  # Backend
+curl http://localhost:8081/actuator/health  # Ledger
+curl http://localhost:8082/actuator/health  # Orchestrator
+curl http://localhost:8085/actuator/health  # API Gateway
+
+# Verificar Kafka
+docker logs kafka-bank 2>&1 | grep -i "started"
+
+# Verificar PostgreSQL
+docker exec -it postgres-bank psql -U bank -d bank -c "\dt"
+```
 
 ## 🆘 Si Nada Funciona
 

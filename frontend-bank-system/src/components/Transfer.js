@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAxiosInterceptor } from '../hooks/useAxiosInterceptor';
 
 function Transfer() {
+  const { getAuthConfig } = useAxiosInterceptor();
   const [formData, setFormData] = useState({
     fromAccount: '',
     toAccount: '',
@@ -21,7 +23,7 @@ function Transfer() {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/v1/accounts`);
+      const response = await axios.get(`${backendUrl}/api/v1/accounts`, getAuthConfig());
       setAccounts(response.data);
     } catch (err) {
       console.error('Error fetching accounts:', err);
@@ -62,7 +64,7 @@ function Transfer() {
         sagaId: formData.sagaId || undefined
       };
 
-      const response = await axios.post(`${orchestratorUrl}/api/v1/transfer/start`, payload);
+      const response = await axios.post(`${orchestratorUrl}/api/v1/transfer/start`, payload, getAuthConfig());
       
       setMessage({
         type: 'success',

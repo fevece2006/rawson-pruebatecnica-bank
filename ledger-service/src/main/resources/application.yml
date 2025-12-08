@@ -24,8 +24,10 @@ eureka:
   instance:
     prefer-ip-address: true
 
-kafka:
+spring.kafka:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+kafka:
   transfer:
     events:
       topic: ${KAFKA_TRANSFER_EVENTS_TOPIC:transfer.events}

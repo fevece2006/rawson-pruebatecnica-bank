@@ -12,9 +12,15 @@
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/rawson-bank}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8080/realms/rawson-bank/protocol/openid-connect/certs}
 
 server:
-  port: 8080
+  port: 8083
 
 eureka:
   client:

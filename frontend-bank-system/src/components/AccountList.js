@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAxiosInterceptor } from '../hooks/useAxiosInterceptor';
 
 function AccountList() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8082';
+  const { getAuthConfig } = useAxiosInterceptor();
 
   useEffect(() => {
     fetchAccounts();
@@ -14,7 +16,7 @@ function AccountList() {
   const fetchAccounts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${backendUrl}/api/v1/accounts`);
+      const response = await axios.get(`${backendUrl}/api/v1/accounts`, getAuthConfig());
       setAccounts(response.data);
       setError(null);
     } catch (err) {
@@ -33,7 +35,7 @@ function AccountList() {
       await axios.post(`${backendUrl}/api/v1/accounts/debit`, {
         accountNumber,
         amount: parseFloat(amount)
-      });
+      }, getAuthConfig());
       alert('Débito realizado con éxito');
       fetchAccounts();
     } catch (err) {
@@ -49,7 +51,7 @@ function AccountList() {
       await axios.post(`${backendUrl}/api/v1/accounts/credit`, {
         accountNumber,
         amount: parseFloat(amount)
-      });
+      }, getAuthConfig());
       alert('Crédito realizado con éxito');
       fetchAccounts();
     } catch (err) {

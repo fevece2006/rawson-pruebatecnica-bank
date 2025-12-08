@@ -13,6 +13,7 @@ services:
       POSTGRES_PASSWORD: bank
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./init-keycloak-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bank -d bank"]
       interval: 10s
@@ -69,6 +70,33 @@ services:
       - kafka
       - zookeeper
 
+  # Keycloak for OAuth2/JWT Authentication
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: keycloak-bank
+    command: start-dev
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: bank
+      KC_DB_PASSWORD: bank
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HTTP_ENABLED: 'true'
+      KC_PROXY: edge
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
   # Service Registry (Eureka)
   service-registry:
     build:
@@ -114,7 +142,7 @@ services:
       dockerfile: backend-bank-system/Dockerfile
     container_name: backend-bank-system
     ports:
-      - "8080:8080"
+      - "8083:8083"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bank
       - SPRING_DATASOURCE_USERNAME=bank
@@ -130,7 +158,7 @@ services:
       service-registry:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5

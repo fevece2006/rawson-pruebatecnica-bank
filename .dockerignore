@@ -1,0 +1,44 @@
+# Build directories
+**/build/
+**/target/
+**/bin/
+**/out/
+
+# Dependencies
+**/node_modules/
+**/.gradle/
+
+# IDE
+**/.idea/
+**/.vscode/
+**/.settings/
+**/*.iml
+**/.classpath
+**/.project
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# Git
+**/.git/
+**/.gitignore
+
+# Documentation
+**/*.md
+!README.md
+
+# Scripts (but keep gradle wrapper scripts)
+**/*.ps1
+!gradlew
+!gradlew.bat
+
+# Docker
+**/Dockerfile*
+**/.dockerignore
+**/docker-compose*.yml
+
+# Temporary files
+**/*.log
+**/*.tmp
+**/.cache/

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAxiosInterceptor } from '../hooks/useAxiosInterceptor';
 
 function SagaMonitor() {
+  const { getAuthConfig } = useAxiosInterceptor();
   const [sagas, setSagas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ function SagaMonitor() {
   const fetchSagas = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${orchestratorUrl}/api/v1/transfer/sagas`);
+      const response = await axios.get(`${orchestratorUrl}/api/v1/transfer/sagas`, getAuthConfig());
       setSagas(response.data);
       setError(null);
     } catch (err) {

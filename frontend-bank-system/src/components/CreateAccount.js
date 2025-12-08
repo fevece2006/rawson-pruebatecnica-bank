@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useAxiosInterceptor } from '../hooks/useAxiosInterceptor';
 
 function CreateAccount() {
+  const { getAuthConfig } = useAxiosInterceptor();
   const [formData, setFormData] = useState({
     accountNumber: '',
     currency: 'USD',
